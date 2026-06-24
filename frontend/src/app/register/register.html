@@ -1,0 +1,82 @@
+<div class="register-container">
+    <form [formGroup]="registerGroup" class="register-form-wrapper" (ngSubmit)="onSubmit()">
+        <section>
+            <div class="row">
+                <label>Frist name</label>
+                <input formControlName="fname" placeholder="John"/>
+                @if (fname?.touched && fname!.hasError("required")){
+                    <span class="form-error">First name is required!</span>
+                }
+                @else if (fname?.hasError("minlength") || fname?.hasError("maxlength")) {
+                    <span class="form-error">First name must be between 3 and 20 characters!</span>
+                }
+            </div>
+            <div class="row">
+                <label>Last name</label>
+                <input formControlName="lname" placeholder="Doe"/> 
+                @if (lname?.touched && lname!.hasError("required")){
+                    <span class="form-error">Last name is required!</span>
+                }
+                @else if (lname?.hasError("minlength") || lname?.hasError("maxlength")) {
+                    <span class="form-error">Last name must be between 3 and 20 characters!</span>
+                }
+            </div>
+        </section>
+        <section>
+            <label >Email</label>
+            <input formControlName="email" placeholder="john.doe@gmail.com"/>
+            @if (registerGroup.get("email")?.hasError("email")){
+                <span class="form-error">Please enter a valid email address</span>
+            }
+            @else if (registerGroup.get("email")?.touched && registerGroup.get("email")?.invalid){
+                <span class="form-error">Email is required</span>
+            }
+            
+        </section>
+        <section>
+            <label>Birth date</label>
+            <input formControlName="birthDate" type="date" value="13-02-2004">
+            @if (bdate!.touched && bdate?.hasError("required")){
+                <span>Birth date is required!</span>
+            }
+            @else if (registerGroup!.hasError("invalidDate")) {
+                <span>Please enter a valid date!</span>
+            }
+        </section>
+        <section>
+            <label>Username</label>
+            <input formControlName="username" placeholder="john123"/>
+            @if (uname?.touched && uname!.hasError("required")){
+                <span class="form-error">Username is required</span>
+            }
+            @else if (uname?.hasError("minlength") || uname?.hasError("maxlength")) {
+                    <span class="form-error">Username must be between 3 and 20 characters!</span>
+                }
+        </section>
+        <section>
+            <section>
+                <label>Password</label>
+                <app-password-input [control]="password1" className="password-wrapper" placeholder="Password"></app-password-input>
+                @if (password1.touched && password1!.hasError("required")){
+                    <span class="form-error">Password is required</span>
+                }
+                @else if (password1.hasError("minlength") || password1!.hasError("maxlength")) {
+                    <span class="form-error">Password must be between 8 and 20 characters!</span>
+                }
+            </section>
+
+            <section>
+                <label>Confirm password</label>
+                <app-password-input [control]="password2" className="password-wrapper" placeholder="Confirm password"></app-password-input>
+                @if (registerGroup.hasError('passwordMismatch')){
+                    <span class="form-error">Passwords must match!</span>
+                }
+            </section>
+        </section>
+        <section>
+            <button type="submit" [disabled]="registerGroup.invalid" class="register-btn">Register</button>
+        </section>
+    </form>
+
+
+</div>
