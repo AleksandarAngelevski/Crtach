@@ -1,0 +1,50 @@
+<div class="login-container">
+<form [formGroup]="fg" class="login-form-wrapper">
+
+  <section>
+    <label>Username</label>
+    <input formControlName="username" placeholder="Username" />
+    @if (usernameError) {
+        <p class="error">{{ usernameError }}</p>
+    }
+  </section>
+
+  <section>
+    <label>Password</label>
+
+    <div class="password-wrapper">
+      <input
+        formControlName="password"
+        [type]="hidePassword ? 'password' : 'text'"
+        placeholder="Password"
+      />
+
+      <button
+        type="button"
+        class="toggle-button"
+        (click)="togglePasswordVisibility()"
+        aria-label="Toggle password"
+      >
+        @if (hidePassword) {
+          <fa-icon [icon]="faEye"></fa-icon>
+        } @else {
+          <fa-icon [icon]="faEyeSlash"></fa-icon>
+        }
+      </button>
+    </div>
+    @if (passwordError) {
+        <p class="error">{{ passwordError }}</p>
+    }
+  </section>
+
+  <section>
+    <button type="button" (click)="login()" class="login-btn">
+      Login
+    </button>
+  </section>
+</form>
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+</div>
