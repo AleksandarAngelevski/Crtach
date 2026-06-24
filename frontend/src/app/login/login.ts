@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
-import * as Yup from 'yup';
+import { PasswordInput } from "../shared/password-input/password-input";
 
 type LoginDto = {
   username: string;
@@ -16,7 +16,7 @@ type LoginDto = {
   templateUrl: './login.html',
   styleUrl: './login.css',
   standalone: true,
-  imports: [FontAwesomeModule, ReactiveFormsModule],
+  imports: [FontAwesomeModule, ReactiveFormsModule, PasswordInput],
 })
 export class LoginComponent {
   usernameError = '';
@@ -36,28 +36,9 @@ export class LoginComponent {
   });
 
   login() {
-    this.errFlag = !this.errFlag;
-    if (this.fg.get('username')!.invalid) {
-      this.usernameError = 'Enter username';
-      this.errFlag = !this.errFlag;
-    }
-    if(this.fg.get('password')!.invalid){
-      this.passwordError = 'Enter password';
-      this.errFlag = !this.errFlag;
-    }
-    if(this.errFlag){
-      return
-    }
-
-    const dto = this.fg.value as LoginDto;
-
-    this.http.post('/api/login', dto).subscribe({
-      next: () => this.router.navigate(['/home']),
-      error: () => (this.error = 'Login failed'),
-    });
+    console.log(this.fg.value);
   }
 
-  togglePasswordVisibility(): void {
-    this.hidePassword = !this.hidePassword;
-  }
+  get password() { return this.fg.get("password") as FormControl;}
+
 }

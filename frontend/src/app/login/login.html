@@ -1,5 +1,5 @@
 <div class="login-container">
-<form [formGroup]="fg" class="login-form-wrapper">
+<form [formGroup]="fg" class="login-form-wrapper" (ngSubmit)="login()">
 
   <section>
     <label>Username</label>
@@ -11,27 +11,8 @@
 
   <section>
     <label>Password</label>
+    <app-password-input [control]="password" [className]="'password-wrapper'" placeholder="Password"></app-password-input>
 
-    <div class="password-wrapper">
-      <input
-        formControlName="password"
-        [type]="hidePassword ? 'password' : 'text'"
-        placeholder="Password"
-      />
-
-      <button
-        type="button"
-        class="toggle-button"
-        (click)="togglePasswordVisibility()"
-        aria-label="Toggle password"
-      >
-        @if (hidePassword) {
-          <fa-icon [icon]="faEye"></fa-icon>
-        } @else {
-          <fa-icon [icon]="faEyeSlash"></fa-icon>
-        }
-      </button>
-    </div>
     @if (passwordError) {
         <p class="error">{{ passwordError }}</p>
     }
