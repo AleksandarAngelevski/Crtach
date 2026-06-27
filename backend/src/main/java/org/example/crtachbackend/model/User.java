@@ -9,14 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.crtachbackend.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,6 +31,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "users")
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -55,10 +59,43 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
+    @Builder.Default
+    private boolean isAccountNonExpired = true;
+
+    @Builder.Default
+    private boolean isAccountNonLocked = true;
+
+    @Builder.Default
+    private boolean isCredentialsNonExpired = true;
+
+    @Builder.Default
+    private boolean isEnabled  = true;
+
     private List<GrantedAuthority> authorities;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 
 }

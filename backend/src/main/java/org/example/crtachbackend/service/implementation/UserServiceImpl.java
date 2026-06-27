@@ -3,11 +3,15 @@ package org.example.crtachbackend.service.implementation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.example.crtachbackend.dto.UserDto;
+import org.example.crtachbackend.dto.UserLoginDto;
 import org.example.crtachbackend.dto.UserRegistrationDto;
 import org.example.crtachbackend.mapper.UserMapper;
 import org.example.crtachbackend.model.User;
 import org.example.crtachbackend.repository.UserRepository;
 import org.example.crtachbackend.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,10 +25,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final AuthenticationManager authenticationManager;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.authenticationManager = authenticationManager;
     }
 
     /**
@@ -114,6 +120,28 @@ public class UserServiceImpl implements UserService {
             }
 
             userRepository.deleteById(id);
+    }
+
+    /**
+     * Method used for authenticating a user
+     *
+     * @param userLoginDto - the user login dto
+     *                     param used for logging in
+     *                     the user
+     *
+     * @return - returns the authenticated user
+     */
+    @Override
+    public User authenticate(UserLoginDto userLoginDto) {
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userLoginDto.getUsername(),
+                            userLoginDto.getPassword()
+                    )
+            );
+
+            return userRepository.findUserByUsername(userLoginDto.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 
     /**

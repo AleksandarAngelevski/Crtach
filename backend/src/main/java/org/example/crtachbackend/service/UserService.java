@@ -1,7 +1,9 @@
 package org.example.crtachbackend.service;
 
 import org.example.crtachbackend.dto.UserDto;
+import org.example.crtachbackend.dto.UserLoginDto;
 import org.example.crtachbackend.dto.UserRegistrationDto;
+import org.example.crtachbackend.model.User;
 
 /**
  * The user service interface
@@ -52,4 +54,16 @@ public interface UserService {
      *           a user
      */
     void deleteUserById(Long id);
+
+    /**
+     * Method used for authenticating
+     * a user
+     *
+     * @param userLoginDto - the user login dto
+     *                     param used for logging in
+     *                     the user
+     *
+     * @return - return's a user
+     */
+    User authenticate(UserLoginDto userLoginDto);
 }

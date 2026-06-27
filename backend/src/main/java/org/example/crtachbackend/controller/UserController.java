@@ -1,9 +1,13 @@
 package org.example.crtachbackend.controller;
 
 import jakarta.validation.Valid;
+import org.example.crtachbackend.dto.LoginResponseDto;
 import org.example.crtachbackend.dto.UserDto;
+import org.example.crtachbackend.dto.UserLoginDto;
 import org.example.crtachbackend.dto.UserRegistrationDto;
+import org.example.crtachbackend.model.User;
 import org.example.crtachbackend.service.UserService;
+import org.example.crtachbackend.service.jwt.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     /**
@@ -92,5 +98,27 @@ public class UserController {
         userService.deleteUserById(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Method that authenticates a user
+     *
+     * @param userLoginDto - the user login dto
+     *                     param used to authenticate
+     *                     a user
+     *
+     * @return - returns a login response dto
+     *          containing a token and expiration time
+     */
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> authenticate(@Valid @RequestBody UserLoginDto userLoginDto){
+
+        User authenticatedUser = userService.authenticate(userLoginDto);
+
+        String jwtToken = jwtService.generateToken(authenticatedUser);
+
+        LoginResponseDto loginResponseDto = new LoginResponseDto(jwtToken, jwtService.getExpirationTime());
+
+        return ResponseEntity.ok(loginResponseDto);
     }
 }
