@@ -5,11 +5,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { PasswordInput } from "../shared/password-input/password-input";
+import { LoginRequest } from '../models/login-request.model';
+import { AuthService } from '../shared/services/auth.service';
 
-type LoginDto = {
-  username: string;
-  password: string;
-};
 
 @Component({
   selector: 'app-login',
@@ -19,26 +17,32 @@ type LoginDto = {
   imports: [FontAwesomeModule, ReactiveFormsModule, PasswordInput],
 })
 export class LoginComponent {
-  usernameError = '';
-  passwordError = '';
   error = '';
-  hidePassword = true;
-  errFlag = false;
 
   faEye = faEye;
   faEyeSlash = faEyeSlash;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
 
   fg = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
   });
 
   login() {
-    console.log(this.fg.value);
+    this.fg.markAllAsTouched();
+    if (this.fg.invalid) return;
+
+    const dto : LoginRequest = {
+      username: this.fg.value.username!,
+      password: this.fg.value.password!,
+    };
+
+    //Will implement when login endpoint is done
+    // this.authService.login(dto).subscribe
+    
   }
 
   get password() { return this.fg.get("password") as FormControl;}
-
+  get uname() { return this.fg.get("username")!};
 }

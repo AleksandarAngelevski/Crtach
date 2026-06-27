@@ -88,7 +88,7 @@ input:focus{
     top: 50%;
 }
 
-.clas-error{
+.form-error{
     color: red;
     padding-left: 10px; 
     font-weight: 900;

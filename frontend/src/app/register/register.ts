@@ -3,8 +3,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, V
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { PasswordInput } from "../shared/password-input/password-input";
-import { NgIf } from "../../../node_modules/@angular/common/types/_common_module-chunk";
-import { filter } from 'rxjs';
+import { DateService } from '../shared/services/date.service';
+import { RegisterRequest } from '../models/register-request.model';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -19,12 +22,12 @@ export class RegisterComponent {
   faEye = faEye;
   faEyeSlash = faEyeSlash;
   
-  constructor( private fb: FormBuilder){
+  constructor( private fb: FormBuilder, private dateService: DateService, private authService: AuthService, private router: Router){
     this.registerGroup = this.fb.group(
       {
         fname: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20)],],
         lname: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20)], ],
-        username: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20)],],
+        username: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(20)],],
         email: ["",[Validators.email, Validators.required]],
         password1: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20)], ],
         password2: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20), ]],
@@ -44,9 +47,23 @@ export class RegisterComponent {
     this.hidePassword = !this.hidePassword;
   }
   onSubmit() {
-    const [year, month, day] = this.registerGroup.value["birthDate"].split('-');
-    this.registerGroup.value["birthDate"] = `${day}/${month}/${year}`;
-    console.log(this.registerGroup.value);
+    this.registerGroup.markAllAsTouched();
+    if(this.registerGroup.invalid) return;
+
+    const dto : RegisterRequest = {
+      firstName: this.registerGroup.value.fname,
+      lastName: this.registerGroup.value.lname,
+      username: this.registerGroup.value.username,
+      email: this.registerGroup.value.email,
+      password: this.registerGroup.value.password2,
+      role: 'USER',
+      birthDate: this.dateService.formatToDisplay(this.registerGroup.value.birthDate),
+    };
+
+    this.authService.register(dto).subscribe({
+        next:() => this.router.navigate(['/login']),
+        error: (err: HttpErrorResponse) => console.error(err)
+      });
     return "" ;
   }
 }
@@ -64,3 +81,5 @@ function validDate(control: AbstractControl): ValidationErrors | null {
   if (isNaN(fieldDate.getTime())) return null;
   return today < fieldDate.getTime()? {invalidDate: true} : null;
 }
+
+
