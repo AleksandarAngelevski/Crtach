@@ -4,17 +4,22 @@
   <section>
     <label>Username</label>
     <input formControlName="username" placeholder="Username" />
-    @if (usernameError) {
-        <p class="error">{{ usernameError }}</p>
+    @if (uname!.touched && uname!.hasError("required")){
+      <span class="form-error">Username is required!</span>
+    }
+    @else if (uname!.hasError("minlength") || uname!.hasError("maxlength")) {
+      <span class="form-error">Username must be between 5 and 20 characters!</span>
     }
   </section>
 
   <section>
     <label>Password</label>
     <app-password-input [control]="password" [className]="'password-wrapper'" placeholder="Password"></app-password-input>
-
-    @if (passwordError) {
-        <p class="error">{{ passwordError }}</p>
+    @if (password!.touched && password!.hasError("required")){
+      <span class="form-error">Password is required!</span>
+    }
+    @else if (password!.hasError("minlength") || password!.hasError("maxlength")) {
+      <span class="form-error">Password must be between 8 and 20 characters!</span>
     }
   </section>
 

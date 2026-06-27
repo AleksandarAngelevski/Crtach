@@ -50,7 +50,7 @@
                 <span class="form-error">Username is required</span>
             }
             @else if (uname?.hasError("minlength") || uname?.hasError("maxlength")) {
-                    <span class="form-error">Username must be between 3 and 20 characters!</span>
+                    <span class="form-error">Username must be between 5 and 20 characters!</span>
                 }
         </section>
         <section>
@@ -74,7 +74,7 @@
             </section>
         </section>
         <section>
-            <button type="submit" [disabled]="registerGroup.invalid" class="register-btn">Register</button>
+            <button type="submit" class="register-btn">Register</button>
         </section>
     </form>
 

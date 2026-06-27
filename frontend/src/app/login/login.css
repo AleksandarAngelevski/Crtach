@@ -70,7 +70,7 @@ input:focus{
 .login-container .login-form-wrapper section:last-child{
     margin-top: 15px;
 }
-.error{
+.form-error{
     color: red;
     padding-left: 10px; 
     font-weight: 900;
