@@ -38,8 +38,13 @@ export class LoginComponent {
       password: this.fg.value.password!,
     };
 
-    //Will implement when login endpoint is done
-    // this.authService.login(dto).subscribe
+    this.authService.login(dto).subscribe({
+      next: (res) => {
+        this.authService.saveToken(res["token"])
+        this.router.navigate(['']);
+      }
+
+  })
     
   }
 
