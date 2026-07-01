@@ -12,7 +12,6 @@ CREATE TABLE users
     is_account_non_locked      BOOLEAN                                 NOT NULL,
     is_credentials_non_expired BOOLEAN                                 NOT NULL,
     is_enabled                 BOOLEAN                                 NOT NULL,
-    authorities                UNKNOWN__JAVA.UTIL.LIST<ORG.SPRINGFRAMEWORK.SECURITY.CORE.GRANTEDAUTHORITY>,
     CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
