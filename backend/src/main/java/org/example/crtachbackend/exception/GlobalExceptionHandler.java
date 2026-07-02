@@ -1,11 +1,17 @@
 package org.example.crtachbackend.exception;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A Controller advice class used
@@ -29,7 +35,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value={EntityNotFoundException.class})
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException e){
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return ResponseEntity.
+                status(HttpStatus.NOT_FOUND)
+                .header("Content-Type", "text/plain;charset=UTF-8")
+                .body(e.getMessage());
     }
 
     /**
@@ -47,7 +56,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value={IllegalArgumentException.class})
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e){
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .header("Content-Type", "text/plain;charset=UTF-8")
+                .body(e.getMessage());
     }
 
     /**
@@ -65,6 +77,58 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value={UsernameNotFoundException.class})
     public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException e){
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .header("Content-Type", "text/plain;charset=UTF-8")
+                .body(e.getMessage());
+    }
+
+    /**
+     * Exception handler method that
+     * handles the entity already exists
+     * exception
+     *
+     * @param e - the entity already exists
+     *          exception param
+     *
+     * @return - returns a new response entity
+     *          with a status code of conflict
+     *          and exception message
+     */
+    @ExceptionHandler(value = {EntityExistsException.class})
+    public ResponseEntity<String> handleEntityExistsException(EntityExistsException e){
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .header("Content-Type", "text/plain;charset=UTF-8")
+                .body(e.getMessage());
+    }
+
+    /**
+     * Exception handler method that
+     * handles the method argument
+     * not valid exception
+     *
+     * @param e - the method argument not valid
+     *          exception param
+     *
+     * @return - returns a new response entity
+     *          with a status code of bad
+     *          request and exception message
+     *
+     */
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+
+        Map<String,String> errors = new HashMap<>();
+
+        e.getBindingResult().getAllErrors().forEach((error)->{
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+
+            errors.put(fieldName,errorMessage);
+        });
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

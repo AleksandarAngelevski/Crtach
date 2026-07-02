@@ -1,5 +1,6 @@
 package org.example.crtachbackend.service.implementation;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.example.crtachbackend.dto.UserDto;
@@ -46,6 +47,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDto createUser(UserRegistrationDto userRegistrationDto) {
+
+        if (userRepository.findUserByEmail(userRegistrationDto.getEmail()).isPresent() || userRepository.findUserByUsername(userRegistrationDto.getUsername()).isPresent()) {
+            
+            throw new EntityExistsException("Email or Username already exists");
+        }
 
         User user = userMapper.userRegistrationDtoToUser(userRegistrationDto);
 
