@@ -10,7 +10,8 @@
     padding: 50px 0;
     justify-content: center;
     /* align-items: center; */
-    overflow: scroll;
+
+    
     flex-direction: column;
     align-items: center;
 }
@@ -22,7 +23,6 @@
     /* background-color: red; */
     height: 100%;
     width: 100%;
-    overflow: scroll;
 }
 .register-container .register-form-wrapper{
     display: flex;
@@ -33,6 +33,7 @@
     width: 100%;
     height: 100%;
     padding: 0 10px;
+
 }
 
 
@@ -93,6 +94,16 @@ input:focus{
     padding-left: 10px; 
     font-weight: 900;
 }
+.login-btn{
+    width: 100%;
+    height:50px;
+    background-color: darkblue;
+    border: none;
+    color: #FFFF;
+    font-weight: 900;
+    font-size: 1rem;
+    border-radius: 15px;
+}
 
 @media  screen and (min-width:992px) {
     .register-container .register-form-wrapper section .register-btn{
@@ -101,6 +112,12 @@ input:focus{
     .register-container .register-form-wrapper section .register-btn:hover{
         background-color: rgb(0, 0, 174);
    }; 
+   .login-btn:hover{
+    background-color: rgb(0, 0, 174);
+   }
+   .login-btn{
+    transition-duration: 0.4s;
+   }
    .register-container .register-form-wrapper section input{
         transition-duration: 0.4s;
    }

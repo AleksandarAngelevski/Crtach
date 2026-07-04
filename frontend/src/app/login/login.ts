@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -17,7 +17,7 @@ import { AuthService } from '../shared/services/auth.service';
   imports: [FontAwesomeModule, ReactiveFormsModule, PasswordInput],
 })
 export class LoginComponent {
-  error = '';
+  error = signal("");
 
   faEye = faEye;
   faEyeSlash = faEyeSlash;
@@ -42,10 +42,17 @@ export class LoginComponent {
       next: (res) => {
         this.authService.saveToken(res["token"])
         this.router.navigate(['']);
+      },
+      error: (err) =>{
+        this.error.set(err.error);
       }
 
   })
     
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
   }
 
   get password() { return this.fg.get("password") as FormControl;}

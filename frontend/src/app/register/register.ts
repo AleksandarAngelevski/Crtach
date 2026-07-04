@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, ValidationErrors, AbstractControl} from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
@@ -15,9 +15,12 @@ import { AuthService } from '../shared/services/auth.service';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class RegisterComponent {
+export class RegisterComponent 
+{
+  
   hidePassword = true;
   registerGroup : FormGroup;
+  error = signal("");
 
   faEye = faEye;
   faEyeSlash = faEyeSlash;
@@ -62,9 +65,16 @@ export class RegisterComponent {
 
     this.authService.register(dto).subscribe({
         next:() => this.router.navigate(['/login']),
-        error: (err: HttpErrorResponse) => console.error(err)
+        error: (err: HttpErrorResponse) => {
+            this.error.set(err.error);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       });
     return "" ;
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 }
 

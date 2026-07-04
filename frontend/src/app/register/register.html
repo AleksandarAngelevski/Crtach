@@ -1,4 +1,7 @@
 <div class="register-container">
+    @if (error() !== "") {
+        <p class="form-error">{{ error() }}</p>
+    }
     <form [formGroup]="registerGroup" class="register-form-wrapper" (ngSubmit)="onSubmit()">
         <section>
             <div class="row">
@@ -75,6 +78,9 @@
         </section>
         <section>
             <button type="submit" class="register-btn">Register</button>
+        </section>
+        <section>
+            <button type="button" (click)="navigateToLogin()" class="login-btn">Login</button>
         </section>
     </form>
 
