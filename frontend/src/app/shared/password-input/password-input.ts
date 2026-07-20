@@ -15,7 +15,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
       </button>
     </div>
   `,
-  styleUrl: './password-input.css',
+  styleUrls: ['./password-input.css'],
 })
 export class PasswordInput {
   @Input() className = '';

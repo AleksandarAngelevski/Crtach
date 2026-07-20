@@ -13,7 +13,7 @@ import { AuthService } from '../shared/services/auth.service';
   selector: 'app-register',
   imports: [ReactiveFormsModule, FontAwesomeModule, PasswordInput],
   templateUrl: './register.html',
-  styleUrl: './register.css',
+  styleUrls: ['./register.css'],
 })
 export class RegisterComponent 
 {
