@@ -1,20 +1,23 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
+import { HeaderComponent } from '../header/header';
+import { SidebarComponent } from '../sidebar/sidebar';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [ HeaderComponent, SidebarComponent],
   templateUrl: './home.html',
-  styleUrl: './home.css',
+  styleUrls: ['./home.css'],
 })
 export class HomeComponent {
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
+  isSidebarCollapsed = signal<boolean>(true);
+  
 
-  logout(){
-    console.log("Logging out...");
-    this.authService.logout();
-    this.router.navigate(['/login']);
+
+  changeIsSideBarCollapsed(isSidebarCollapsed: boolean){
+    this.isSidebarCollapsed.set(isSidebarCollapsed);
   }
 }
+
+
