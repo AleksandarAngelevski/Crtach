@@ -4,6 +4,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -130,5 +131,26 @@ public class GlobalExceptionHandler {
         });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Exception handler method that
+     * handles the access denied
+     * exception
+     *
+     * @param e - the access denied exception
+     *          param
+     *
+     * @return - returns a new response entity
+     *          with a status code of access denied
+     *          and exception message
+     */
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e){
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .header("Content-Type", "text/plain;charset=UTF-8")
+                .body(e.getMessage());
     }
 }
