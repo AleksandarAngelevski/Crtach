@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Long id) {
 
             if (id == null) {
-                throw new IllegalArgumentException("id cannot be null");
+                throw new IllegalArgumentException("User id cannot be null");
             }
 
             return userMapper.userToUserDto(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found!")));
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
 
             if (id == null) {
-                throw new IllegalArgumentException("id cannot be null");
+                throw new IllegalArgumentException("User id cannot be null");
             }
 
             userRepository.deleteById(id);
