@@ -48,3 +48,6 @@ Thumbs.db
 frontend/node_modules/
 frontend/.angular/
 
+# environment files
+.env
+*.env
