@@ -1,0 +1,13 @@
+<div class="sidenav" [ngClass]="isSidebarCollapsed() ? 'sidenav-collapsed' : ''">
+    <button class="sidebar-toggle" (click)="toggleSidebar()" aria-label="Toggle navigation">
+        <fa-icon [icon]="isSidebarCollapsed() ? menuIcon : closeIcon"></fa-icon>
+    </button>
+    <nav>
+        <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+        <button (click)="logout()" id="logout">Logout</button>
+    </nav>
+</div>

@@ -12,7 +12,7 @@ import { AuthService } from '../shared/services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['./login.css'],
   standalone: true,
   imports: [FontAwesomeModule, ReactiveFormsModule, PasswordInput],
 })
